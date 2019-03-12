@@ -30,8 +30,13 @@ public class RouteHandler implements HttpHandler {
 
         try {
             Method methodToCall = pathHandlerMethodMap.get(route);
-            response = (String) methodToCall.invoke(routeHandlerMethod, null);
-            status = 200;
+            if (methodToCall == null) {
+                status = 400;
+                response = "Requested page doesn't exist.";
+            } else {
+                response = (String) methodToCall.invoke(routeHandlerMethod, null);
+                status = 200;
+            }
         } catch (IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
             response = "Sorry, we encountered a problem, but we are working on it.";
